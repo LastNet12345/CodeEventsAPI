@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace CodeEvents.Api
+namespace CodeEvents.Api.Data
 {
     public class MapperProfile : Profile
     {
