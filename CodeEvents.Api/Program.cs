@@ -16,7 +16,8 @@ namespace CodeEvents.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CodeEventsApiContext") ?? throw new InvalidOperationException("Connection string 'CodeEventsApiContext' not found.")));
 
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
+                                                .AddXmlDataContractSerializerFormatters();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
