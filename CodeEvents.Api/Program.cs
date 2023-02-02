@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using CodeEvents.Api.Data;
 
 namespace CodeEvents.Api
 {
@@ -9,6 +12,10 @@ namespace CodeEvents.Api
 
             // Add services to the container.
 
+            builder.Services.AddDbContext<CodeEventsApiContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CodeEventsApiContext") ?? throw new InvalidOperationException("Connection string 'CodeEventsApiContext' not found.")));
+
+
             builder.Services.AddControllers();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -19,6 +26,11 @@ namespace CodeEvents.Api
             builder.Services.AddAutoMapper(typeof(MapperProfile));
 
             var app = builder.Build();
+
+
+
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
