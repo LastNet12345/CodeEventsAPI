@@ -26,7 +26,8 @@ namespace CodeEvents.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CodeEvent>>> GetCodeEvent()
         {
-            return null; // await _context.CodeEvent.ToListAsync();
+            var events = await uow.CodeEventRepository.GetAsync();
+            return Ok(events);
         }
 
     }
