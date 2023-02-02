@@ -6,7 +6,7 @@ namespace CodeEvents.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +27,7 @@ namespace CodeEvents.Api
 
             var app = builder.Build();
 
-
+            await app.SeedDataAsync();
 
 
 
