@@ -7,29 +7,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CodeEvents.Api.Core.Entities;
 using CodeEvents.Api.Data;
+using CodeEvents.Api.Data.Repositories;
 
 namespace CodeEvents.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/events")]
     [ApiController]
     public class CodeEventsController : ControllerBase
     {
-        private readonly CodeEventsApiContext _context;
+        private UnitOfWork uow;
 
-        public CodeEventsController(CodeEventsApiContext context)
+        public CodeEventsController(CodeEventsApiContext db)
         {
-            _context = context;
+            uow = new UnitOfWork(db);
         }
 
         // GET: api/CodeEvents
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CodeEvent>>> GetCodeEvent()
         {
-          if (_context.CodeEvent == null)
-          {
-              return NotFound();
-          }
-            return await _context.CodeEvent.ToListAsync();
+            return null; // await _context.CodeEvent.ToListAsync();
         }
 
     }
