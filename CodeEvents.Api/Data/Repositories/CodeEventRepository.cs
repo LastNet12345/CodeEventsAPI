@@ -12,9 +12,13 @@ namespace CodeEvents.Api.Data.Repositories
             this.db = db;
         }
 
-        public async Task<IEnumerable<CodeEvent>> GetAsync()
+        public async Task<IEnumerable<CodeEvent>> GetAsync(bool includeLectures)
         {
-            return await db.CodeEvent.ToListAsync();
+            return includeLectures ? await db.CodeEvent.Include(c => c.Location)
+                                                       .Include(c => c.Lectures)
+                                                       .ToListAsync() :
+                                     await db.CodeEvent.Include(c => c.Location)
+                                                       .ToListAsync();
         }
     }
 }
