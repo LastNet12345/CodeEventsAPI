@@ -14,6 +14,6 @@ namespace CodeEvents.Api.Core.DTOs
         public string LocationPostalCode { get; set; }
         public string LocationCountry { get; set; }
        
-        public ICollection<Lecture> Lectures { get; set; }
+        public ICollection<LectureDto> Lectures { get; set; }
     }
 }

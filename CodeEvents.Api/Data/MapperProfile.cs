@@ -9,6 +9,7 @@ namespace CodeEvents.Api.Data
         public MapperProfile()
         {
             CreateMap<CodeEvent, CodeEventDto>().ReverseMap();
+            CreateMap<Lecture, LectureDto>().ReverseMap();
         }
     }
 }
