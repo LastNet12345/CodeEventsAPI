@@ -12,7 +12,7 @@ namespace CodeEvents.Api.Data.Repositories
             this.db = db;
         }
 
-        public async Task<IEnumerable<CodeEvent>> GetAsync(bool includeLectures)
+        public async Task<IEnumerable<CodeEvent>> GetAsync(bool includeLectures = false)
         {
             return includeLectures ? await db.CodeEvent.Include(c => c.Location)
                                                        .Include(c => c.Lectures)
@@ -21,7 +21,7 @@ namespace CodeEvents.Api.Data.Repositories
                                                        .ToListAsync();
         }
 
-        public async Task<CodeEvent?> GetAsync(string name, bool includeLectures)
+        public async Task<CodeEvent?> GetAsync(string name, bool includeLectures = false)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -40,6 +40,16 @@ namespace CodeEvents.Api.Data.Repositories
 
             return await query.FirstOrDefaultAsync(c => c.Name == name);
 
+        }
+
+        public async Task AddAsync(CodeEvent codeEvent)
+        {
+            if (codeEvent is null)
+            {
+                throw new ArgumentNullException(nameof(codeEvent));
+            }
+
+            await db.AddAsync(codeEvent);
         }
     }
 }

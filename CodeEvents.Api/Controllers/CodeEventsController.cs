@@ -49,6 +49,22 @@ namespace CodeEvents.Api.Controllers
            
             return Ok(dto);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<CodeEventDto>> CreateCodeEvent(CreateCodeEventDto dto)
+        {
+            if(await uow.CodeEventRepository.GetAsync(dto.Name) != null)
+            {
+                ModelState.AddModelError("Name", "Name exists");
+                return BadRequest(ModelState);
+            }
+
+            var codeEvent = mapper.Map<CodeEvent>(dto);
+            await uow.CodeEventRepository.AddAsync(codeEvent);
+            await uow.CompleteAsync();
+
+            return CreatedAtAction(nameof(GetCodeEvent), new { name = codeEvent.Name }, mapper.Map<CodeEventDto>(dto));
+        }
         
     }
 }
