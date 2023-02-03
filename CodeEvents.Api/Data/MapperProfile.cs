@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CodeEvents.Api.Core.DTOs;
+using CodeEvents.Api.Core.Entities;
 
 namespace CodeEvents.Api.Data
 {
@@ -6,7 +8,7 @@ namespace CodeEvents.Api.Data
     {
         public MapperProfile()
         {
-
+            CreateMap<CodeEvent, CodeEventDto>().ReverseMap();
         }
     }
 }
