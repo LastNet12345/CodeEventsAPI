@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using CodeEvents.Api.Data;
+using CodeEvents.Api.Data.Repositories;
 
 namespace CodeEvents.Api
 {
@@ -12,6 +13,8 @@ namespace CodeEvents.Api
 
             // Add services to the container.
 
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             builder.Services.AddDbContext<CodeEventsApiContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CodeEventsApiContext") ?? throw new InvalidOperationException("Connection string 'CodeEventsApiContext' not found.")));
 
@@ -23,6 +26,7 @@ namespace CodeEvents.Api
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGen();
+
 
             builder.Services.AddAutoMapper(typeof(MapperProfile));
 

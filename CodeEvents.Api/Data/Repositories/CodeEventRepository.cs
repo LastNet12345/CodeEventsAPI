@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeEvents.Api.Data.Repositories
 {
-    public class CodeEventRepository
+    public class CodeEventRepository : ICodeEventRepository
     {
         private readonly CodeEventsApiContext db;
 
@@ -32,7 +32,7 @@ namespace CodeEvents.Api.Data.Repositories
                     .Include(c => c.Location)
                     .AsQueryable();
 
-            if(includeLectures)
+            if (includeLectures)
             {
                 query = query.Include(c => c.Lectures);
             }

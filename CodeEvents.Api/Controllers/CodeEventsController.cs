@@ -18,7 +18,7 @@ namespace CodeEvents.Api.Controllers
     public class CodeEventsController : ControllerBase
     {
         private readonly IMapper mapper;
-        private UnitOfWork uow;
+        private IUnitOfWork uow;
 
         public CodeEventsController(CodeEventsApiContext db, IMapper mapper)
         {
