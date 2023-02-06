@@ -33,5 +33,15 @@ namespace CodeEvents.Api.Data.Repositories
                                   .FirstOrDefaultAsync(l => l.Id == id);
 
         }
+
+        public async Task AddAsync(Lecture lecture)
+        {
+            if (lecture is null)
+            {
+                throw new ArgumentNullException(nameof(lecture));
+            }
+
+            await db.Lecture.AddAsync(lecture);
+        }
     }
 }

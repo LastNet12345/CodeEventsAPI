@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CodeEvents.Api.Core.DTOs;
+using CodeEvents.Api.Core.Entities;
 using CodeEvents.Api.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,5 +56,32 @@ namespace CodeEvents.Api.Controllers
 
             return Ok(mapper.Map<LectureDto>(lecture));
         }
+
+        [HttpPost]
+        public async Task<ActionResult<LectureDto>> CreateLecture(string name, CreateLectureDto dto)
+        {
+            var codeEvent = await uow.CodeEventRepository.GetAsync(name);
+
+            if (codeEvent is null)
+            {
+                return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                          StatusCodes.Status404NotFound,
+                                                                          title: "Codeevent ´not exists",
+                                                                          detail: $"The codeevent {name} doesent exist"));
+            }
+
+            var lecture = mapper.Map<Lecture>(dto);
+            lecture.CodeEvent= codeEvent;
+            await uow.LecturesRepository.AddAsync(lecture);
+            await uow.CompleteAsync();
+
+            var created = mapper.Map<LectureDto>(lecture);
+
+            return CreatedAtAction(nameof(GetLecture), new { name = codeEvent.Name, id = created.Id }, created);
+
+
+
+        }
+
     }
 }
