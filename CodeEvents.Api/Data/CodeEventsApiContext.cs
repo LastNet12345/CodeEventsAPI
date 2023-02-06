@@ -10,6 +10,7 @@ namespace CodeEvents.Api.Data
     public class CodeEventsApiContext : DbContext
     {
         public DbSet<CodeEvent> CodeEvent => Set<CodeEvent>();
+        public DbSet<Lecture> Lecture => Set<Lecture>();
         public CodeEventsApiContext (DbContextOptions<CodeEventsApiContext> options)
             : base(options)
         {
