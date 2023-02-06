@@ -20,7 +20,8 @@ namespace CodeEvents.Api
 
 
             builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
-                                                .AddXmlDataContractSerializerFormatters();
+                            .AddNewtonsoftJson();
+                                               // .AddXmlDataContractSerializerFormatters();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

@@ -10,6 +10,7 @@ using CodeEvents.Api.Data;
 using CodeEvents.Api.Data.Repositories;
 using CodeEvents.Api.Core.DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace CodeEvents.Api.Controllers
 {
@@ -64,6 +65,36 @@ namespace CodeEvents.Api.Controllers
             await uow.CompleteAsync();
 
             return CreatedAtAction(nameof(GetCodeEvent), new { name = codeEvent.Name }, mapper.Map<CodeEventDto>(dto));
+        }
+
+        [HttpPut("{name}")]
+        public async Task<ActionResult<CodeEventDto>> PutEvent(string name, CodeEventDto dto)
+        {
+            var codeEvent = await uow.CodeEventRepository.GetAsync(name);
+            if(codeEvent== null) return NotFound();
+
+            mapper.Map(dto, codeEvent);
+            await uow.CompleteAsync();
+
+            return Ok(mapper.Map<CodeEventDto>(codeEvent));
+        } 
+        
+        [HttpPatch("{name}")]
+        public async Task<ActionResult<CodeEventDto>> PatchEvent(string name, JsonPatchDocument<CodeEventDto> patchDocument)
+        {
+            var codeEvent = await uow.CodeEventRepository.GetAsync(name, true);
+            if(codeEvent== null) return NotFound();
+
+            var dto = mapper.Map<CodeEventDto>(codeEvent);
+
+            patchDocument.ApplyTo(dto, ModelState);
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            mapper.Map(dto, codeEvent);
+            await uow.CompleteAsync();
+
+            return Ok(mapper.Map<CodeEventDto>(codeEvent));
         }
         
     }
