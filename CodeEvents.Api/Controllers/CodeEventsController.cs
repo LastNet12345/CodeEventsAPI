@@ -11,6 +11,7 @@ using CodeEvents.Api.Data.Repositories;
 using CodeEvents.Api.Core.DTOs;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
+using CodeEvents.Api.Core.Repositories;
 
 namespace CodeEvents.Api.Controllers
 {

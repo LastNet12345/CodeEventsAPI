@@ -1,11 +1,13 @@
-﻿namespace CodeEvents.Api.Data.Repositories
+﻿using CodeEvents.Api.Core.Repositories;
+
+namespace CodeEvents.Api.Data.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CodeEventsApiContext db;
 
         public ICodeEventRepository CodeEventRepository { get; }
-        public LecturesRepository LecturesRepository { get; }
+        public ILecturesRepository LecturesRepository { get; }
 
         public UnitOfWork(CodeEventsApiContext db)
         {

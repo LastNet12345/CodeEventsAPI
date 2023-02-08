@@ -1,9 +1,10 @@
 ﻿using CodeEvents.Api.Core.Entities;
+using CodeEvents.Api.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeEvents.Api.Data.Repositories
 {
-    public class LecturesRepository
+    public class LecturesRepository : ILecturesRepository
     {
         private readonly CodeEventsApiContext db;
 

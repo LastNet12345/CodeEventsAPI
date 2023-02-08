@@ -1,6 +1,6 @@
 ﻿using CodeEvents.Api.Core.Entities;
 
-namespace CodeEvents.Api.Data.Repositories
+namespace CodeEvents.Api.Core.Repositories
 {
     public interface ICodeEventRepository
     {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using CodeEvents.Api.Data;
 using CodeEvents.Api.Data.Repositories;
+using CodeEvents.Api.Core.Repositories;
 
 namespace CodeEvents.Api
 {

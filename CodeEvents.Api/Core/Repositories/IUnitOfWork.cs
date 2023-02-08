@@ -1,9 +1,9 @@
-﻿namespace CodeEvents.Api.Data.Repositories
+﻿namespace CodeEvents.Api.Core.Repositories
 {
     public interface IUnitOfWork
     {
         ICodeEventRepository CodeEventRepository { get; }
-        LecturesRepository LecturesRepository { get; }
+        ILecturesRepository LecturesRepository { get; }
 
         Task CompleteAsync();
     }
