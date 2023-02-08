@@ -25,10 +25,37 @@ namespace CodeEvents.Client.Controllers
         {
 
             //var res = await SimpleGet();
-            var res = await GetWithRequestMessage();
+           // var res = await GetWithRequestMessage();
+            var res = await CreateLecture();
 
 
             return View();
+        }
+
+        private async Task<LectureDto> CreateLecture()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "api/events/NewName/lectures");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
+
+            var lecture = new CreateLectureDto
+            {
+                Level = 56,
+                Title = "From Client"
+            };
+
+            var serializedLecture = JsonSerializer.Serialize(lecture);
+
+            request.Content = new StringContent(serializedLecture);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue(json);
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadAsStringAsync();
+            var lectureDto = JsonSerializer.Deserialize<LectureDto>(result, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+            return lectureDto!;
+
         }
 
         private async Task<IEnumerable<CodeEventDto?>> GetWithRequestMessage()
