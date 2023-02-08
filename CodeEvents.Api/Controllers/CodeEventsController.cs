@@ -12,6 +12,7 @@ using CodeEvents.Api.Core.DTOs;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using CodeEvents.Api.Core.Repositories;
+using CodeEvents.Api.Filters;
 
 namespace CodeEvents.Api.Controllers
 {
@@ -26,6 +27,7 @@ namespace CodeEvents.Api.Controllers
         {
             uow = new UnitOfWork(db);
             this.mapper = mapper;
+            var x = "Kalle";
         }
 
         // GET: api/CodeEvents
@@ -53,13 +55,14 @@ namespace CodeEvents.Api.Controllers
         }
 
         [HttpPost]
+        [TypeFilter(typeof(EventExistsFilter), Arguments = new object[] {"dto"})]
         public async Task<ActionResult<CodeEventDto>> CreateCodeEvent(CreateCodeEventDto dto)
         {
-            if(await uow.CodeEventRepository.GetAsync(dto.Name) != null)
-            {
-                ModelState.AddModelError("Name", "Name exists");
-                return BadRequest(ModelState);
-            }
+            //if(await uow.CodeEventRepository.GetAsync(dto.Name) != null)
+            //{
+            //    ModelState.AddModelError("Name", "Name exists");
+            //    return BadRequest(ModelState);
+            //}
 
             var codeEvent = mapper.Map<CodeEvent>(dto);
             await uow.CodeEventRepository.AddAsync(codeEvent);
