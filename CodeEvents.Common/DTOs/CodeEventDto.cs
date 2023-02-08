@@ -1,4 +1,4 @@
-﻿using CodeEvents.Api.Core.Entities;
+﻿
 
 namespace CodeEvents.Api.Core.DTOs
 {
