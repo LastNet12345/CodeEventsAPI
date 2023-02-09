@@ -1,5 +1,6 @@
 ﻿using CodeEvents.Api.Core.DTOs;
 using CodeEvents.Client.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Http.Headers;
@@ -26,10 +27,34 @@ namespace CodeEvents.Client.Controllers
 
             //var res = await SimpleGet();
            // var res = await GetWithRequestMessage();
-            var res = await CreateLecture();
+           // var res = await CreateLecture();
+            var res = await PatchCodeEvent();
 
 
             return View();
+        }
+
+        private async Task<CodeEventDto> PatchCodeEvent()
+        {
+            var patchDokument = new JsonPatchDocument<CodeEventDto>();
+            patchDokument.Replace(c => c.LocationCityTown, "City");
+            patchDokument.Remove(c => c.LocationStateProvince);
+
+            var serializedPatch = Newtonsoft.Json.JsonConvert.SerializeObject(patchDokument);
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, "api/events/NewName");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
+
+            request.Content = new StringContent(serializedPatch);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json-patch+json");
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadAsStringAsync();
+            var codeEventDto = JsonSerializer.Deserialize<CodeEventDto>(result, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+            return codeEventDto!;
         }
 
         private async Task<LectureDto> CreateLecture()
