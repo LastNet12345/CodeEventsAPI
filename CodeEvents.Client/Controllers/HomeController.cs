@@ -1,5 +1,6 @@
 ﻿using CodeEvents.Api.Core.DTOs;
 using CodeEvents.Client.Clients;
+using CodeEvents.Client.Helpers;
 using CodeEvents.Client.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +36,9 @@ namespace CodeEvents.Client.Controllers
             // var res = await CreateLecture();
             // var res = await PatchCodeEvent();
 
-            var res = await codeEventClient.GetAsync<IEnumerable<CodeEventDto>>("api/events");
-            var res2 = await codeEventClient.GetAsync<CodeEventDto>("api/events/NewName");
-            var res3 = await codeEventClient.GetAsync<LectureDto>("api/events/NewName/lectures/1");
+            var res = await codeEventClient.GetAsync<IEnumerable<CodeEventDto>>(UriHelper.GetEvents());
+            var res2 = await codeEventClient.GetAsync<CodeEventDto>(UriHelper.GetEvent("NewName"));
+            var res3 = await codeEventClient.GetAsync<LectureDto>(UriHelper.GetLectureForEvent("NewName", 1));
 
 
             return View();
