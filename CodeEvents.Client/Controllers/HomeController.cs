@@ -35,23 +35,14 @@ namespace CodeEvents.Client.Controllers
             // var res = await CreateLecture();
             // var res = await PatchCodeEvent();
 
-             var res = await codeEventClient.GetCodeEventsAsync();
-             var res2 = await codeEventClient.GetCodeEventAsync("NewName");
-             var res3 = await codeEventClient.GetLectureAsync("NewName", 1);
+            var res = await codeEventClient.GetAsync<IEnumerable<CodeEventDto>>("api/events");
+            var res2 = await codeEventClient.GetAsync<CodeEventDto>("api/events/NewName");
+            var res3 = await codeEventClient.GetAsync<LectureDto>("api/events/NewName/lectures/1");
 
 
             return View();
         } 
         
-        public async Task<IActionResult> Index2()
-        {
-
-            
-             var lecture = await codeEventClient.GetLectureAsync("NewName", 1);
-
-
-            return View();
-        }
 
         private async Task<CodeEventDto> PatchCodeEvent()
         {
