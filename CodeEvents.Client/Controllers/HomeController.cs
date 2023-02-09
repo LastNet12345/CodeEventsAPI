@@ -10,16 +10,17 @@ namespace CodeEvents.Client.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly HttpClient httpClient;
+        private readonly IHttpClientFactory httpClientFactory;
         private const string json = "application/json";
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHttpClientFactory httpClientFactory)
         {
-            _logger = logger;
-            httpClient = new HttpClient();
+            httpClient = httpClientFactory.CreateClient();
             httpClient.BaseAddress = new Uri("https://localhost:7181");
-           // httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
+
+            this.httpClientFactory = httpClientFactory;
+            // httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
         }
 
         public async Task<IActionResult> Index()
@@ -36,6 +37,8 @@ namespace CodeEvents.Client.Controllers
 
         private async Task<CodeEventDto> PatchCodeEvent()
         {
+            var httpClient = httpClientFactory.CreateClient("CodeEventsClient");
+
             var patchDokument = new JsonPatchDocument<CodeEventDto>();
             patchDokument.Replace(c => c.LocationCityTown, "Hökarängen");
             patchDokument.Remove(c => c.LocationStateProvince);

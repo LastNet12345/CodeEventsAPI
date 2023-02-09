@@ -1,3 +1,5 @@
+using System.Net.Http.Headers;
+
 namespace CodeEvents.Client
 {
     public class Program
@@ -18,6 +20,22 @@ namespace CodeEvents.Client
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //1.
+            builder.Services.AddHttpClient();
+
+            //2
+            builder.Services.AddHttpClient("CodeEventsClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7181");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });  
+            
+            builder.Services.AddHttpClient("SomeOtherClient", client =>
+            {
+                client.BaseAddress = new Uri("");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
