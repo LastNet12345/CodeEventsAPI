@@ -37,10 +37,11 @@ namespace CodeEvents.Client.Controllers
         private async Task<CodeEventDto> PatchCodeEvent()
         {
             var patchDokument = new JsonPatchDocument<CodeEventDto>();
-            patchDokument.Replace(c => c.LocationCityTown, "City");
+            patchDokument.Replace(c => c.LocationCityTown, "Hökarängen");
             patchDokument.Remove(c => c.LocationStateProvince);
 
-            var serializedPatch = Newtonsoft.Json.JsonConvert.SerializeObject(patchDokument);
+             var serializedPatch = Newtonsoft.Json.JsonConvert.SerializeObject(patchDokument);
+            //var serializedPatch = JsonSerializer.Serialize(patchDokument); NotWorking needs Newtonsoft.Json
 
             var request = new HttpRequestMessage(HttpMethod.Patch, "api/events/NewName");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
