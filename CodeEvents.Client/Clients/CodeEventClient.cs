@@ -4,32 +4,32 @@ using System.Text.Json;
 
 namespace CodeEvents.Client.Clients
 {
-    public class CodeEventClient
+    public class CodeEventClient : BaseClient, ICodeEventClient
     {
-        private readonly HttpClient httpClient;
-        private const string json = "application/json";
 
-        public CodeEventClient(HttpClient httpClient)
+        public CodeEventClient(HttpClient httpClient) : base(httpClient)
         {
-            this.httpClient = httpClient;
-            this.httpClient.BaseAddress = new Uri("https://localhost:7181");
-            this.httpClient.Timeout = new TimeSpan(0 ,0, 30);
-            this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
+            HttpClient.BaseAddress = new Uri("https://localhost:7181");
+            HttpClient.Timeout = new TimeSpan(0, 0, 30);
+            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<IEnumerable<CodeEventDto?>> GetWithRequestMessage()
+        public async Task<CodeEventDto?> GetCodeEventAsync(string name)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "api/events");
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
-
-            var response = await httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadAsStringAsync();
-            var codeEvents = JsonSerializer.Deserialize<IEnumerable<CodeEventDto>>(result, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-
-            return codeEvents!;
+            return await GetAsync<CodeEventDto>($"api/events/{name}");
         }
+
+        public async Task<IEnumerable<CodeEventDto>?> GetCodeEventsAsync()
+        {
+            return await GetAsync<IEnumerable<CodeEventDto>>($"api/events");
+        }
+
+        public async Task<LectureDto?> GetLectureAsync(string name, int id)
+        {
+            return await GetAsync<LectureDto>($"api/events/{name}/lectures/{id}");
+        }
+
+
 
     }
 }

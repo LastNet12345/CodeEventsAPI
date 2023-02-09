@@ -31,7 +31,7 @@ namespace CodeEvents.Client
 
             //3
 
-            builder.Services.AddHttpClient<CodeEventClient>();
+            builder.Services.AddHttpClient<ICodeEventClient, CodeEventClient>();
             //    (client =>
             //{
             //    client.BaseAddress = new Uri("");

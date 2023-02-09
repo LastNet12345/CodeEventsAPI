@@ -13,11 +13,12 @@ namespace CodeEvents.Client.Controllers
     {
         private readonly HttpClient httpClient;
         private readonly IHttpClientFactory httpClientFactory;
-        private readonly CodeEventClient codeEventClient;
+        private readonly ICodeEventClient codeEventClient;
         private const string json = "application/json";
 
-        public HomeController(IHttpClientFactory httpClientFactory, HttpClient client, CodeEventClient codeEventClient)
+        public HomeController(IHttpClientFactory httpClientFactory, HttpClient client, ICodeEventClient codeEventClient)
         {
+           
             httpClient = httpClientFactory.CreateClient();
             httpClient.BaseAddress = new Uri("https://localhost:7181");
 
@@ -30,9 +31,23 @@ namespace CodeEvents.Client.Controllers
         {
 
             //var res = await SimpleGet();
-           // var res = await GetWithRequestMessage();
-           // var res = await CreateLecture();
-            var res = await PatchCodeEvent();
+            // var res = await GetWithRequestMessage();
+            // var res = await CreateLecture();
+            // var res = await PatchCodeEvent();
+
+             var res = await codeEventClient.GetCodeEventsAsync();
+             var res2 = await codeEventClient.GetCodeEventAsync("NewName");
+             var res3 = await codeEventClient.GetLectureAsync("NewName", 1);
+
+
+            return View();
+        } 
+        
+        public async Task<IActionResult> Index2()
+        {
+
+            
+             var lecture = await codeEventClient.GetLectureAsync("NewName", 1);
 
 
             return View();
