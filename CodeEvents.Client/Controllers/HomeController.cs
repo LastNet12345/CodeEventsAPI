@@ -1,4 +1,5 @@
 ﻿using CodeEvents.Api.Core.DTOs;
+using CodeEvents.Client.Clients;
 using CodeEvents.Client.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -12,14 +13,16 @@ namespace CodeEvents.Client.Controllers
     {
         private readonly HttpClient httpClient;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly CodeEventClient codeEventClient;
         private const string json = "application/json";
 
-        public HomeController(IHttpClientFactory httpClientFactory)
+        public HomeController(IHttpClientFactory httpClientFactory, HttpClient client, CodeEventClient codeEventClient)
         {
             httpClient = httpClientFactory.CreateClient();
             httpClient.BaseAddress = new Uri("https://localhost:7181");
 
             this.httpClientFactory = httpClientFactory;
+            this.codeEventClient = codeEventClient;
             // httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
         }
 

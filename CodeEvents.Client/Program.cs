@@ -1,3 +1,4 @@
+using CodeEvents.Client.Clients;
 using System.Net.Http.Headers;
 
 namespace CodeEvents.Client
@@ -19,13 +20,22 @@ namespace CodeEvents.Client
             {
                 client.BaseAddress = new Uri("https://localhost:7181");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            });  
+            });
+                
             
             builder.Services.AddHttpClient("SomeOtherClient", client =>
             {
                 client.BaseAddress = new Uri("");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
+
+            //3
+
+            builder.Services.AddHttpClient<CodeEventClient>();
+            //    (client =>
+            //{
+            //    client.BaseAddress = new Uri("");
+            //});
 
             var app = builder.Build();
 
