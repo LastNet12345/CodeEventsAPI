@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using CodeEvents.Api.Data;
 using CodeEvents.Api.Data.Repositories;
 using CodeEvents.Api.Core.Repositories;
+using System.Reflection;
 
 namespace CodeEvents.Api
 {
@@ -27,7 +28,30 @@ namespace CodeEvents.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("CodeEventsOpenAPISpecification", new()
+                {
+                    Title = "CodeEvent API",
+                    Version = "1",
+                    Description = "Through this API you can access code events and stuff.",
+                    Contact = new()
+                    {
+                        Email = "david.nokto@lexicon.se",
+                        Name = "David Nokto",
+                        Url = new Uri("https://www.google.com")
+                    },
+                    License = new()
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://www.google.com")
+                    }
+                });
+
+                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+                opt.IncludeXmlComments(xmlCommentsFullPath);
+            });
 
 
             builder.Services.AddAutoMapper(typeof(MapperProfile));
@@ -43,7 +67,12 @@ namespace CodeEvents.Api
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(setupAction =>
+                {
+                    setupAction.SwaggerEndpoint("/swagger/CodeEventsOpenAPISpecification/swagger.json",
+                        "CodeEvent API");
+                    setupAction.RoutePrefix = string.Empty;
+                });
             }
 
             app.UseHttpsRedirection();

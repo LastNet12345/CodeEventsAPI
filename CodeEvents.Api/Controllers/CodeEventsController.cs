@@ -18,6 +18,7 @@ namespace CodeEvents.Api.Controllers
 {
     [Route("api/events")]
     [ApiController]
+    [Produces("application/json", "application/xml")]
     public class CodeEventsController : ControllerBase
     {
         private readonly IMapper mapper;
@@ -31,6 +32,11 @@ namespace CodeEvents.Api.Controllers
         }
 
         // GET: api/CodeEvents
+        /// <summary>
+        /// Get all events
+        /// </summary>
+        /// <param name="includeLectures">Set to true to include lectures for each event</param>
+        /// <returns>Name, lenght, date, location info</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CodeEventDto>>> GetCodeEvent(bool includeLectures)
         {
@@ -41,6 +47,9 @@ namespace CodeEvents.Api.Controllers
         
         [HttpGet]
         [Route("{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CodeEventDto>> GetCodeEvent(string name, bool includeLectures)
         {
             if (string.IsNullOrWhiteSpace(name)) return BadRequest();
@@ -56,6 +65,7 @@ namespace CodeEvents.Api.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(EventExistsFilter), Arguments = new object[] {"dto"})]
+        [Consumes("appliction/json", "application/xml")]
         public async Task<ActionResult<CodeEventDto>> CreateCodeEvent(CreateCodeEventDto dto)
         {
             //if(await uow.CodeEventRepository.GetAsync(dto.Name) != null)
