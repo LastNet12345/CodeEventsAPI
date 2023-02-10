@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using CodeEvents.Api.Core.Repositories;
 using CodeEvents.Api.Data;
 using CodeEvents.Api.Data.Repositories;
-using CodeEvents.Api.Core.Repositories;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodeEvents.Api
 {
@@ -16,14 +14,14 @@ namespace CodeEvents.Api
             // Add services to the container.
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
+
             builder.Services.AddDbContext<CodeEventsApiContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CodeEventsApiContext") ?? throw new InvalidOperationException("Connection string 'CodeEventsApiContext' not found.")));
 
 
             builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
                             .AddNewtonsoftJson();
-                                               // .AddXmlDataContractSerializerFormatters();
+            // .AddXmlDataContractSerializerFormatters();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -48,9 +46,12 @@ namespace CodeEvents.Api
                     }
                 });
 
-                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
-                opt.IncludeXmlComments(xmlCommentsFullPath);
+                //var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+                //opt.IncludeXmlComments(xmlCommentsFullPath);
+
+                List<string> xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+                xmlFiles.ForEach(xmlFile => opt.IncludeXmlComments(xmlFile));
             });
 
 
