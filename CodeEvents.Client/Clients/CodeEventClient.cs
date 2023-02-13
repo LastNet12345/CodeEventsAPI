@@ -1,4 +1,5 @@
 ﻿using CodeEvents.Api.Core.DTOs;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -28,7 +29,20 @@ namespace CodeEvents.Client.Clients
             {
                 using (var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
                 {
-                    response.EnsureSuccessStatusCode();
+
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine(response.StatusCode switch
+                        {
+                            HttpStatusCode.NotFound => "Not Found",
+                            HttpStatusCode.BadRequest => "BadRequest",
+                            _ => "Something went wrong"
+
+                        });
+                  
+                        response.EnsureSuccessStatusCode();
+                    }
+
 
                     var stream = await response.Content.ReadAsStreamAsync();
 
