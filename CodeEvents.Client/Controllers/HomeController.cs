@@ -15,6 +15,7 @@ namespace CodeEvents.Client.Controllers
         private readonly HttpClient httpClient;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly ICodeEventClient codeEventClient;
+        private readonly CancellationTokenSource tokenSource;
         private const string json = "application/json";
 
         public HomeController(IHttpClientFactory httpClientFactory, HttpClient client, ICodeEventClient codeEventClient)
@@ -26,6 +27,8 @@ namespace CodeEvents.Client.Controllers
             this.httpClientFactory = httpClientFactory;
             this.codeEventClient = codeEventClient;
             // httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(json));
+            tokenSource = new CancellationTokenSource();
+           // tokenSource.CancelAfter(TimeSpan.FromSeconds(1));
         }
 
         public async Task<IActionResult> Index()
@@ -36,7 +39,7 @@ namespace CodeEvents.Client.Controllers
             // var res = await CreateLecture();
             // var res = await PatchCodeEvent();
 
-            var res = await codeEventClient.GetAsync<IEnumerable<CodeEventDto>>(UriHelper.GetEvents());
+            var res = await codeEventClient.GetAsync<IEnumerable<CodeEventDto>>(UriHelper.GetEvents(), tokenSource.Token);
             //var res2 = await codeEventClient.GetAsync<CodeEventDto>(UriHelper.GetEvent("NewName"));
             //var res3 = await codeEventClient.GetAsync<LectureDto>(UriHelper.GetLectureForEvent("NewName", 1));
 

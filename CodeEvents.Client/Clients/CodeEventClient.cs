@@ -8,7 +8,7 @@ namespace CodeEvents.Client.Clients
     {
         private readonly HttpClient httpClient;
 
-        public CodeEventClient(HttpClient httpClient) 
+        public CodeEventClient(HttpClient httpClient)
         {
             this.httpClient = httpClient;
             this.httpClient.BaseAddress = new Uri("https://localhost:7181");
@@ -16,18 +16,35 @@ namespace CodeEvents.Client.Clients
             this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<T?> GetAsync<T>(string path, string contentType = "application/json")
+        public async Task<T?> GetAsync<T>(string path, CancellationToken cancellationToken, string contentType = "application/json")
         {
             var request = new HttpRequestMessage(HttpMethod.Get, path);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 
-            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
+            T result = default!;
 
-            var stream = await response.Content.ReadAsStreamAsync();
+            try
+            {
+                using (var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+                {
+                    response.EnsureSuccessStatusCode();
 
-            return JsonSerializer.Deserialize<T>(stream, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
+                    var stream = await response.Content.ReadAsStreamAsync();
+
+                    result =  JsonSerializer.Deserialize<T>(stream, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
+
+                }
+
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Canceled");
+              //  throw;
+            }
+
+            return result;
+
         }
     }
 }
