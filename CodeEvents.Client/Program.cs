@@ -32,6 +32,7 @@ namespace CodeEvents.Client
             //3
 
             builder.Services.AddHttpClient<ICodeEventClient, CodeEventClient>()
+                .AddHttpMessageHandler(handler => new RetryDelagatinHandler())
                 .ConfigurePrimaryHttpMessageHandler(handler => new HttpClientHandler()
                 {
                     AutomaticDecompression = System.Net.DecompressionMethods.GZip
