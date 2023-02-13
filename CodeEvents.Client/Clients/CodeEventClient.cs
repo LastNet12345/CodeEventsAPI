@@ -20,6 +20,7 @@ namespace CodeEvents.Client.Clients
         {
             var request = new HttpRequestMessage(HttpMethod.Get, path);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();

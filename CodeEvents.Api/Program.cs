@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using CodeEvents.Api.Data;
 using CodeEvents.Api.Data.Repositories;
 using CodeEvents.Api.Core.Repositories;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace CodeEvents.Api
 {
@@ -29,7 +30,11 @@ namespace CodeEvents.Api
 
             builder.Services.AddSwaggerGen();
 
-
+            builder.Services.AddResponseCompression(opt =>
+            {
+                opt.EnableForHttps= true;
+               // opt.Providers.Add<GzipCompressionProvider>();
+            });
             builder.Services.AddAutoMapper(typeof(MapperProfile));
 
             var app = builder.Build();
@@ -45,6 +50,8 @@ namespace CodeEvents.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseResponseCompression();
 
             app.UseHttpsRedirection();
 

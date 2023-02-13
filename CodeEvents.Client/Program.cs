@@ -31,11 +31,12 @@ namespace CodeEvents.Client
 
             //3
 
-            builder.Services.AddHttpClient<ICodeEventClient, CodeEventClient>();
-            //    (client =>
-            //{
-            //    client.BaseAddress = new Uri("");
-            //});
+            builder.Services.AddHttpClient<ICodeEventClient, CodeEventClient>()
+                .ConfigurePrimaryHttpMessageHandler(handler => new HttpClientHandler()
+                {
+                    AutomaticDecompression = System.Net.DecompressionMethods.GZip
+                });
+           
 
             var app = builder.Build();
 

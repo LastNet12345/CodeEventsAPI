@@ -37,8 +37,8 @@ namespace CodeEvents.Client.Controllers
             // var res = await PatchCodeEvent();
 
             var res = await codeEventClient.GetAsync<IEnumerable<CodeEventDto>>(UriHelper.GetEvents());
-            var res2 = await codeEventClient.GetAsync<CodeEventDto>(UriHelper.GetEvent("NewName"));
-            var res3 = await codeEventClient.GetAsync<LectureDto>(UriHelper.GetLectureForEvent("NewName", 1));
+            //var res2 = await codeEventClient.GetAsync<CodeEventDto>(UriHelper.GetEvent("NewName"));
+            //var res3 = await codeEventClient.GetAsync<LectureDto>(UriHelper.GetLectureForEvent("NewName", 1));
 
 
             return View();
