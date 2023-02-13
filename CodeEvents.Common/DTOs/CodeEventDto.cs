@@ -3,9 +3,20 @@
 namespace CodeEvents.Api.Core.DTOs
 {
 #nullable disable
+
+    /// <summary>
+    /// A code event with Name, Date and other stuff
+    /// </summary>
     public class CodeEventDto
     {
+        /// <summary>
+        /// Name of the event
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Date of the event
+        /// </summary>
         public DateTime EventDate { get; set; }
         public int Length { get; set; }
         public string LocationAddress { get; set; }

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeEvents.Api</name>
+    </assembly>
+    <members>
+        <member name="M:CodeEvents.Api.Controllers.CodeEventsController.GetCodeEvent(System.Boolean)">
+            <summary>
+            Get all events
+            </summary>
+            <param name="includeLectures">Set to true to include lectures for each event</param>
+            <returns>Name, lenght, date, location info</returns>
+        </member>
+        <member name="T:CodeEvents.Api.Migrations.Init">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeEvents.Api.Migrations.Init.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeEvents.Api.Migrations.Init.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeEvents.Api.Migrations.Init.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

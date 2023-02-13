@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using CodeEvents.Api.Core.Repositories;
 using CodeEvents.Api.Data;
 using CodeEvents.Api.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 using CodeEvents.Api.Core.Repositories;
 using Microsoft.AspNetCore.ResponseCompression;
 
@@ -16,19 +16,45 @@ namespace CodeEvents.Api
             // Add services to the container.
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
+
             builder.Services.AddDbContext<CodeEventsApiContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CodeEventsApiContext") ?? throw new InvalidOperationException("Connection string 'CodeEventsApiContext' not found.")));
 
 
             builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
                             .AddNewtonsoftJson();
-                                               // .AddXmlDataContractSerializerFormatters();
+            // .AddXmlDataContractSerializerFormatters();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("CodeEventsOpenAPISpecification", new()
+                {
+                    Title = "CodeEvent API",
+                    Version = "1",
+                    Description = "Through this API you can access code events and stuff.",
+                    Contact = new()
+                    {
+                        Email = "david.nokto@lexicon.se",
+                        Name = "David Nokto",
+                        Url = new Uri("https://www.google.com")
+                    },
+                    License = new()
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://www.google.com")
+                    }
+                });
+
+                //var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+                //opt.IncludeXmlComments(xmlCommentsFullPath);
+
+                List<string> xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+                xmlFiles.ForEach(xmlFile => opt.IncludeXmlComments(xmlFile));
+            });
 
             builder.Services.AddResponseCompression(opt =>
             {
@@ -48,7 +74,12 @@ namespace CodeEvents.Api
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(setupAction =>
+                {
+                    setupAction.SwaggerEndpoint("/swagger/CodeEventsOpenAPISpecification/swagger.json",
+                        "CodeEvent API");
+                    setupAction.RoutePrefix = string.Empty;
+                });
             }
 
             app.UseResponseCompression();

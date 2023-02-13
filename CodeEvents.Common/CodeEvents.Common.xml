@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeEvents.Common</name>
+    </assembly>
+    <members>
+        <member name="T:CodeEvents.Api.Core.DTOs.CodeEventDto">
+            <summary>
+            A code event with Name, Date and other stuff
+            </summary>
+        </member>
+        <member name="P:CodeEvents.Api.Core.DTOs.CodeEventDto.Name">
+            <summary>
+            Name of the event
+            </summary>
+        </member>
+        <member name="P:CodeEvents.Api.Core.DTOs.CodeEventDto.EventDate">
+            <summary>
+            Date of the event
+            </summary>
+        </member>
+        <member name="P:CodeEvents.Api.Core.DTOs.LectureDto.Title">
+            <summary>
+            Title of the lecture
+            </summary>
+        </member>
+    </members>
+</doc>
