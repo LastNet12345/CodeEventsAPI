@@ -1,4 +1,5 @@
 ﻿using CodeEvents.Api.Core.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -30,8 +31,15 @@ namespace CodeEvents.Client.Clients
                 using (var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
                 {
 
+                    var stream = await response.Content.ReadAsStreamAsync();
+
+
                     if(!response.IsSuccessStatusCode)
                     {
+
+                        ProblemDetails? details = JsonSerializer.Deserialize(stream,  typeof(ProblemDetails),new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ProblemDetails;
+                        Console.WriteLine(details?.Title);
+
                         Console.WriteLine(response.StatusCode switch
                         {
                             HttpStatusCode.NotFound => "Not Found",
@@ -44,7 +52,6 @@ namespace CodeEvents.Client.Clients
                     }
 
 
-                    var stream = await response.Content.ReadAsStreamAsync();
 
                     result =  JsonSerializer.Deserialize<T>(stream, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
 

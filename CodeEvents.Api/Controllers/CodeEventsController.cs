@@ -34,6 +34,7 @@ namespace CodeEvents.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CodeEventDto>>> GetCodeEvent(bool includeLectures)
         {
+            return BadRequest();
             var events = await uow.CodeEventRepository.GetAsync(includeLectures);
             var dto = mapper.Map<IEnumerable<CodeEventDto>>(events); 
             return Ok(dto);
